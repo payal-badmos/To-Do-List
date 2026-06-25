@@ -103,4 +103,14 @@ function saveTasks(){
         JSON.stringify(tasks)
     );
 }
+function updateStats(){
 
+    const total = tasks.length;
+    const completed =
+        tasks.filter(task => task.completed).length;
+    const pending = total - completed;
+
+    document.getElementById("total").textContent = total;
+    document.getElementById("completed").textContent = completed;
+    document.getElementById("pending").textContent = pending;
+}
