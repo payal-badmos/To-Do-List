@@ -2,7 +2,7 @@ const taskInput = document.getElementById("taskInput");
 const priority = document.getElementById("priority");
 const addBtn = document.getElementById("addBtn");
 const taskList = document.getElementById("taskList");
-
+const dueDate = document.getElementById("dueDate");
 let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 
 renderTasks();
@@ -20,6 +20,7 @@ function addTask() {
         id: Date.now(),
         text: taskInput.value,
         priority: priority.value,
+        dueDate: dueDate.value,
         completed: false
     };
 
@@ -35,6 +36,8 @@ function addTask() {
 function renderTasks(){
 
     taskList.innerHTML = "";
+    taskInput.value = "";
+    dueDate.value = "";
 
     tasks.forEach(task => {
 
@@ -48,8 +51,12 @@ function renderTasks(){
             <div>
                 <strong>${task.text}</strong>
                 <div class="priority">
-                    Priority: ${task.priority}
-                </div>
+    Priority: ${task.priority}
+</div>
+
+<div class="due-date">
+    📅 ${task.dueDate || "No Due Date"}
+</div>
             </div>
 
             <div class="task-buttons">
@@ -65,6 +72,11 @@ function renderTasks(){
                 onclick="deleteTask(${task.id})">
                 ✕
                 </button>
+                <button
+class="edit"
+onclick="editTask(${task.id})">
+✏️
+</button>
 
             </div>
         `;
@@ -87,7 +99,23 @@ function toggleTask(id){
     saveTasks();
     renderTasks();
 }
+function editTask(id){
 
+    const task =
+    tasks.find(task => task.id === id);
+
+    const newText =
+    prompt("Edit Task", task.text);
+
+    if(newText !== null &&
+       newText.trim() !== ""){
+
+        task.text = newText;
+
+        saveTasks();
+        renderTasks();
+    }
+}
 function deleteTask(id){
 
     tasks = tasks.filter(task => task.id !== id);
